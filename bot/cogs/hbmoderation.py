@@ -1,11 +1,8 @@
 from discord.ext import commands
 import discord
 
-red = discord.Colour.red()
-
-
 class moderation(commands.Cog):
-    def __init__(self, bot: commands.Bot):
+    def __init__(self, bot):
         self.bot = bot
 
     @commands.command()
@@ -15,8 +12,7 @@ class moderation(commands.Cog):
         embed = discord.Embed(
             title='__Clear!__',
             description=
-            f'{ctx.author.mention}, I have cleared some messages for you',
-            colour=red)
+            f'{ctx.author.mention}, I have cleared some messages for you')
         embed.set_footer(text='Deleting in 30 seconds')
         await ctx.send(embed=embed, delete_after=30)
 
@@ -27,8 +23,7 @@ class moderation(commands.Cog):
         embed = discord.Embed(
             title='__Ban!__',
             description=
-            f'{member.name}#{member.discriminator} was banned from {member.guild.name}',
-            colour=red)
+            f'{member.name}#{member.discriminator} was banned from {member.guild.name}')
         embed.set_footer(text=f'Reason: {reason}')
         await ctx.send(embed=embed)
 
@@ -39,8 +34,7 @@ class moderation(commands.Cog):
         embed = discord.Embed(
             title='__Kick!__',
             description=
-            f'{member.name}#{member.discriminator} was kicked from {member.guild.name}',
-            colour=red)
+            f'{member.name}#{member.discriminator} was kicked from {member.guild.name}')
         embed.set_footer(text=f'Reason: {reason}')
         await ctx.send(embed=embed)
 
@@ -52,8 +46,7 @@ class moderation(commands.Cog):
         embed = discord.Embed(
             title='__Unban!__',
             description=
-            '{member.name}#{member.discriminator} was unbaned from {member.guild.name}',
-            colour=red)
+            '{member.name}#{member.discriminator} was unbaned from {member.guild.name}')
         embed.set_footer(text='They can now rejoin!!')
         await ctx.send(embed=embed)
 
