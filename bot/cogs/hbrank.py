@@ -1,33 +1,28 @@
-from discord.ext import commands
+rom discord.ext import commands
 import discord
 import tools
-from replit import db
+import aiosqlite
 
 red = discord.Colour.red()
 
 
 class rank(commands.Cog):
-    def __init__(self, bot: commands.Bot):
+    def __init__(self, bot):
         self.bot = bot
 
     @commands.command()
     async def rank(self, ctx, user: discord.Member = None):
         if user == None:
-            await tools.open_account(ctx.author.id)
-            wallet, bank, xp, level = db[ctx.author.id].split(',')
-            embed = discord.Embed(
-                title=f"{ctx.author.name}'s rank",
-                description=f'__XP:__ {xp}\n__Level:__ {level}',
-                colour=red)
-            await ctx.send(embed=embed)
-        else:
-            await tools.open_account(user.id)
-            wallet, bank, xp, level = db[user.id].split(',')
-            embed = discord.Embed(
-                title=f"{user.name}'s rank",
-                description=f'__XP:__ {xp}\n__Level:__ {level}',
-                colour=red)
-            await ctx.send(embed=embed)
+            user = ctx.author
+        await tools.open_account(user.id)
+        db = await aiosqlite.connect('database.db')
+        cur = await db.execute(f'SELECT xp, level FROM levels WHERE user=?', (user.id,))
+        rank = await cur.fetchone()
+        embed = discord.Embed(
+            title=f"{user.name}'s rank",
+            description=f'__XP:__ {rank[0]}\n__Level:__ {rank[1]}')
+        await ctx.send(embed=embed)
+        await db.close()
 
 
 def setup(bot):
